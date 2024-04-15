@@ -2,7 +2,7 @@ import sqlite3
 conn = sqlite3.connect('accountLog.db')  # This creates or opens the file 'example.db' as a database
 c = conn.cursor()
 
-
+'''
 # Create table
 c.execute("""CREATE TABLE accounts
             (account_num, account_pin, account_bal)""")
@@ -13,6 +13,8 @@ c.execute("""INSERT INTO accounts (account_num, account_pin, account_bal) VALUES
 
 c.execute('SELECT * FROM accounts')
 print(c.fetchall())
+'''
+
 
 def managing_options():
   print("(1) Check Balance")
@@ -22,38 +24,45 @@ def managing_options():
   print("(5) Create Account")
   print("(6) Delete Account")
   print(" ")
+  print("(7) Exit")
+  print(" ")
+  print(" ")
 
 
 print("Welcome to the C2C Banking Management System")
-print("--------------------------------------------")
-num_check = int(input("Username: "))
-pin_check = int(input("Password: "))
 
-  print("Great! You are now logged in.")
+
+while True:
+  
   print("--------------------------------------------")
-  managing_options():
-    
+  c.execute('SELECT * FROM accounts')
+  print(c.fetchall())
+  print("--------------------------------------------")
+  managing_options()
   m_choice = int(input("Choose an option from the menu above: "))
   if m_choice == 1:
     ac_num = int(input("Enter your account number: "))
-    bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = ac_num")
-    print("Your account balance: "+ bal)
+    bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = "+str(ac_num))
+    theVal = c.fetchone()[0]
+    print("Your current account balance is: "+ str(theVal))
       
   if m_choice == 2:
     ac_num = int(input("Enter your account number: "))
     dep = int(input("Enter the amount you want to deposit: "))
-    bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = ac_num")
-    new_bal = bal + dep
-    bal = new_bal
-    print("Your new balance is: "+ new_bal)
+    bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = "+str(ac_num))
+    theVal = c.fetchone()[0]
+    new_bal = int(theVal) + dep
+    c.execute("UPDATE accounts SET account_bal = "+str(new_bal)+" WHERE account_num = "+str(ac_num))
+    print("Your new balance is: "+ str(new_bal))
 
   if m_choice == 3:
     ac_num = int(input("Enter your account number: "))
     withd = int(input("Enter the amount you want to withdraw: "))
-    bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = ac_num")
-    new_bal = bal - withd
-    bal = new_bal
-    print("Your new balance is: "+ new_bal)
+    bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = "+str(ac_num))
+    theVal = c.fetchone()[0]
+    new_bal = int(theVal) - withd
+    c.execute("UPDATE accounts SET account_bal = "+str(new_bal)+" WHERE account_num = "+str(ac_num))
+    print("Your new balance is: "+ str(new_bal))
 
   if m_choice == 4:
     ac_num = int(input("Enter your account number: "))
@@ -64,23 +73,28 @@ pin_check = int(input("Password: "))
     change_choice = int(input("Enter your choice: "))
     if change_choice == 1:
       new_ac_num = int(input("Enter your new account number: "))
-      c.execute("UPDATE accounts SET account_num = new_ac_num WHERE account_num = ac_num")
-      print("Your account number has been updated to: "+new_ac_num+".")
+      c.execute("UPDATE accounts SET account_num = "+new_ac_num+" WHERE account_num = "+ac_num)
+      print("Your account number has been updated to: "+str(new_ac_num)+".")
     if change_choice == 2:
       new_pin = int(input("Enter your new account pin: "))
-      c.execute("UPDATE accounts SET account_pin = new_pin WHERE account_pin = ac_pin")
-      print("Your new pin is: "+ new_pin)
+      c.execute("UPDATE accounts SET account_pin = "+new_pin+" WHERE account_pin = "+ac_pin)
+      print("Your new pin is: "+ str(new_pin))
 
   if m_choice == 5:
     new_ac_num = int(input("Enter your new account number: "))
     new_pin = int(input("Enter your new account pin: "))
-    c.execute("INSERT INTO accounts (account_num, account_pin, account_bal) VALUES (new_ac_num, new_pin, 0)")
+    c.execute("INSERT INTO accounts (account_num, account_pin, account_bal) VALUES ("+str(new_ac_num)+", "+str(new_pin)+", 0)")
     print("Your new account has been created.")
 
   if m_choice == 6:
     ac_num = int(input("Enter your account number: "))
-    c.execute("DELETE FROM accounts WHERE account_num = ac_num")
+    c.execute("DELETE FROM accounts WHERE account_num = "+str(ac_num))
     print("Your account has been deleted.")
+  if m_choice == 7:
+    print(" ")
+    print("--------------------------------------------")
+    print("Thank you for using the C2C Banking Management System!")
+    break
       
     
 
