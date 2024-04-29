@@ -55,15 +55,15 @@ def deposit(dep, ac_num): #deposit function (choice 2)
     print("Your new balance is: "+ str(new_bal))
     time.sleep(3)
 
-def withdraw(withd, ac_num); #withdraw function (choice 3)
+def withdraw(withd, ac_num): #withdraw function (choice 3)
   bal = c.execute("SELECT account_bal FROM accounts WHERE account_num = "+str(ac_num))
   theVal = c.fetchone()[0]
   new_bal = int(theVal) - withd
   c.execute("UPDATE accounts SET account_bal = "+str(new_bal)+" WHERE account_num = "+str(ac_num))
   
-      reset()
-      print("Your new balance is: "+ str(new_bal))
-      time.sleep(3)
+  reset()
+  print("Your new balance is: "+ str(new_bal))
+  time.sleep(3)
 
 def changeDetails(ac_num, ac_pin): #change acc pin or num (choice 4)
   print("What would you like to change? ")
@@ -88,7 +88,7 @@ def changeDetails(ac_num, ac_pin): #change acc pin or num (choice 4)
     time.sleep(3)
 
 
-def createAcc(ac_num, ac_pin): #create a new account (choice 5)
+def createAcc(new_ac_num, new_pin): #create a new account (choice 5)
   c.execute("INSERT INTO accounts (account_num, account_pin, account_bal) VALUES ("+str(new_ac_num)+", "+str(new_pin)+", 0)")
   reset()
   print("Your new account has been created.")
